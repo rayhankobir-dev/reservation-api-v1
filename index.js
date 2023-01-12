@@ -194,6 +194,15 @@ app.get('/api/v1/reservations/:id', (req, res) => {
     });
 });
 
+// get user by email
+app.get('/api/v1/users/email-check/:email', (req, res) => {
+    User.find({email: req.params.email}, (error, user) => {
+      if (error) return res.status(500).send(error);
+      if(user.length == 0) return res.status(200).send({exist: false})
+      return res.send({exist: true});
+    });
+});
+
 //accept reservation
 app.put('/api/v1/reservations/accept/:id', (req, res) => {
     Reservation.findByIdAndUpdate(req.params.id, req.body, { new: true }, (error, reservation) => {
