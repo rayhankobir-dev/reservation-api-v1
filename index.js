@@ -1,4 +1,3 @@
-require('dotenv').config()
 const { timeStamp, count } = require('console');
 const express = require('express') 
 const cors = require('cors')
@@ -336,6 +335,7 @@ app.get('/api/v1/reservations/request/aviability/:id', (req, res) => {
 
 
 app.listen(PORT, () => {
+    console.log(process.env.PORT)
     console.log(`Server is running on port: ${PORT}`);
 });
 
