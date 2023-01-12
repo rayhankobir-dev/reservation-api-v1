@@ -231,15 +231,13 @@ app.get('/api/v1/reservations/accpeted/capacity', (req, res) => {
     today.setUTCHours(0, 0, 0, 0); 
     Reservation.aggregate([
         {
-            $match: {
-                request_date: {
-                    $gte: today
-                }
+            $project: {
+                re_date: {$dateToString: { format: "%Y-%m-%d", date: "$request_date" }}
             }
         },
         {
           $group: {
-            _id: '$request_date',
+            _id: '$re_date',
             count: { $sum: 1 },
           }
         },
@@ -327,7 +325,10 @@ app.get('/api/v1/reservations/request/aviability/:id', (req, res) => {
         if (err) {
           res.status(500).send(err);
         } else {
-          res.status(200).send(results[0]);
+            if(results.length == 0) {
+                return res.status(200).send({data: 0});
+            }
+            res.status(200).send(results[0]);
         }
       });
 })
